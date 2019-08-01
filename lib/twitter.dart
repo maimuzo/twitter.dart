@@ -8,7 +8,7 @@ import 'src/client.dart';
 /// A Class for Twitter
 class Twitter {
   /// Twitter API Endpoint
-  final String baseUrl = 'https://api.twitter.com/1.1/';
+  String baseUrl = 'https://api.twitter.com/1.1/';
 
   /// oauth.Tokens for [Client]
   oauth.Tokens oauthTokens;
