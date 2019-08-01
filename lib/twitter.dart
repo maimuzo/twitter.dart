@@ -7,9 +7,6 @@ import 'src/client.dart';
 
 /// A Class for Twitter
 class Twitter {
-  /// Twitter API Endpoint
-  String baseUrl = 'https://api.twitter.com/1.1/';
-
   /// oauth.Tokens for [Client]
   oauth.Tokens oauthTokens;
 
@@ -55,19 +52,32 @@ class Twitter {
   /// send a request to Twitter
   ///
   /// [method] is HTTP method name, for example "GET" , "POST".
-  /// [endPoint] is REST API Name of Twitter. for example "statuses/mentions_timeline.json".
-  /// [body] is HTTP Request's body.
+  /// [endPoint] is REST API Name of Twitter. for example "https://api.twitter.com/1.1/statuses/mentions_timeline.json".
+  /// [body] is HTTP Request's body by Map.
   Future<http.Response> request(String method, String endPoint,
       {Map<String, String> body}) {
     if (_completer.isCompleted) {
       _completer = new Completer<http.Response>.sync();
     }
-    var requestUrl = baseUrl + endPoint;
-    _request(method, requestUrl, body: body);
+    _request(method, endPoint, body: body);
     return _completer.future;
   }
 
-  void _request(String method, String requestUrl, {Map body}) async {
+  /// send a request to Twitter
+  ///
+  /// [method] is HTTP method name, for example "GET" , "POST".
+  /// [endPoint] is REST API Name of Twitter. for example "https://api.twitter.com/1.1/statuses/mentions_timeline.json".
+  /// [body] is HTTP Request's body by JSON formated String for nested objects. e.g. statuses/update
+  Future<http.Response> request(String method, String endPoint,
+      {String body}) {
+    if (_completer.isCompleted) {
+      _completer = new Completer<http.Response>.sync();
+    }
+    _request(method, endPoint, body: body);
+    return _completer.future;
+  }
+
+  void _request(String method, String requestUrl, {dynamic body}) async {
     if (twitterClient.client == null) {
       twitterClient = new Client(oauthTokens);
     }
