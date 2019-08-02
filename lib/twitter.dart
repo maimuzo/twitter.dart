@@ -71,7 +71,7 @@ class Twitter {
     if (200 <= response.statusCode && response.statusCode < 300) {
       _completer.complete(response);
     } else {
-      _completer.completeError(response.reasonPhrase);
+      _completer.completeError(response.reasonPhrase + " body: " + response.body);
     }
   }
 
