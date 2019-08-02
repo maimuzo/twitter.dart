@@ -53,15 +53,13 @@ class Twitter {
   ///
   /// [method] is HTTP method name, for example "GET" , "POST".
   /// [endPoint] is REST API Name of Twitter. for example "https://api.twitter.com/1.1/statuses/mentions_timeline.json".
-  /// [body] is HTTP Request's body by JSON formated String for nested objects. e.g. statuses/update
-  /// [bodyFields] is HTTP Request's body by Map.
+  /// [body] is HTTP Request's body by Map.
   Future<http.Response> request(String method, String endPoint,
-      {Map<String, String> bodyFields, String body}) {
+      {Map<String, String> body}) {
     if (_completer.isCompleted) {
       _completer = new Completer<http.Response>.sync();
     }
-    dynamic useBody = null != body ? body : bodyFields;
-    _request(method, endPoint, body: useBody);
+    _request(method, endPoint, body: body);
     return _completer.future;
   }
 
@@ -70,7 +68,7 @@ class Twitter {
       twitterClient = new Client(oauthTokens);
     }
     var response = await twitterClient.request(method, requestUrl, body: body);
-    if (response.statusCode == 200 || response.statusCode == 201) {
+    if (200 <= response.statusCode && response.statusCode < 300) {
       _completer.complete(response);
     } else {
       _completer.completeError(response.reasonPhrase);
